@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Display from "../Display/Display";
 
 const Todo = () => {
@@ -6,6 +6,19 @@ const Todo = () => {
   const [todo, setTodo] = useState([]);
 
   const inputRef = useRef(null);
+
+  // Load data from localStorage when the component mounts
+  useEffect(() => {
+    const storedTodos = window.localStorage.getItem("todo");
+    if (storedTodos) {
+      setTodo([...todo, JSON.parse(storedTodos)]);
+    }
+  }, []);
+
+  // Save data to localStorage whenever todos are updated
+  useEffect(() => {
+    window.localStorage.setItem("todo", JSON.stringify(todo));
+  }, [todo]);
 
   const inputText = (event) => {
     setText(event.target.value);
